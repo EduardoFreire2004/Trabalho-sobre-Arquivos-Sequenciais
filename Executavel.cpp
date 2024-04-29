@@ -3,6 +3,8 @@
 #include <conio.h>
 using namespace std;
 
+#define t 2
+
 struct Cidade{
     int codigo;
     string nome;
@@ -47,14 +49,16 @@ struct Matricula{
 //1
 void Leitura_Cidade(struct Cidade cidade[],int &cont){
     int i = 0;
-    for (int saida = 1; i < 10 && saida != 0; i++){
+    cout << "\n\nLeitura de Cidades\n";
+	for (int saida = 1; i < t && saida != 0; i++){
 		cout << "\nCodigo da Cidade: ";
         cin >> cidade[i].codigo;
+        cin.ignore();
         if (cidade[i].codigo != 0){
             cout << "Nome: ";
-            cin >> cidade[i].nome;
+            getline(cin,cidade[i].nome);
             cout << "UF: ";
-            cin >> cidade[i].uf;
+            getline(cin,cidade[i].uf);
         }
         else saida = 0;
     }
@@ -62,14 +66,16 @@ void Leitura_Cidade(struct Cidade cidade[],int &cont){
 }
 void Leitura_Curso(struct Curso curso[],int &cont){
     int i = 0;
-	for(int saida = 1; i < 10 && saida != 0; i++){
+	cout << "\n\nLeitura de Cursos\n";
+	for(int saida = 1; i < t && saida != 0; i++){
         cout<<"Codigo do Curso: ";
         cin>>curso[i].codigo;
+        cin.ignore();
         if(curso[i].codigo != 0 && curso[i] > 0){
         	cout<<"Descricao: ";
-        	cin>>curso[i].descricao;
+        	getline(cin,curso[i].descricao);
         	cout<<"Valor por aula: ";
-        	cin>>curso[i].valor_por_aula;	
+        	getline(cin,curso[i].valor_por_aula);	
 		}
     	else {
 			saida = 0
@@ -79,50 +85,54 @@ void Leitura_Curso(struct Curso curso[],int &cont){
     }
     cont = i-1;
 }
-//2
 
-void buscaserial_instrutor (struct Instrutor inst[], struct Cidade cidade[],int cod){
-    int i = 0;
-    for (; i < 10 && cod > inst[i].codigo_cidade; i++);
-    if (cod == inst[i].codigo_cidade){
-		cout << "\tNome: " << cidade[i].nome;
-        cout << "\tEndereco: " << cidade[i].endereco;
-        cout << "\tCidade: " << inst[i].cidade;
-        cout << "\tEstado: " << inst[i].uf;
-    }
-    else
-        cout << "\n\n Cliente nao Encontrado";
-    getch();
-}
+void Leitura_instrutor(struct instrutor inst[], struct cidade vetorCidades[], int &cont){
+	int i = 0;
 
-
-void Leitura_instrutor(struct Instrutor inst[],int &cont){
-    int i = 0;
-    for (int saida = 1; i < 20 && saida != 0; i++){
-        cout << "\n\nCodigo do Instrutor " << (i+1) << ": ";
-        cin >> inst[i].codigo;
-        if (inst[i].codigo != 0 && inst[i].codigo > 1){
-            cout << "Nome: ";
-            cin >> inst[i].nome;
-            cout << "Endereco: ";
-            cin >> inst[i].endereco;
-            if(inst[i].codigo_cidade !=0 && inst[i].codigo_cidade > 0){
-            	cout << "Codigo Cidade: ";
-            	cin >> inst[i].codigo_cidade;
-            	
-			}
-            
-        }
-        
-        else {
-			saida = 0
+	cout << "\n\nLeitura de Instrutores\n";
+	for(int saida = 1; i < t && saida != 0; i++){
+        cout<<"Codigo do Instrutor: ";
+        cin>>inst[i].codigo;
+        cin.ignore();
+        if(inst[i].codigo != 0 && inst[i] > 0){
+        	cout<<"Nome: ";
+        	getline(cin,ins[i].nome);
+        	cout<<"Endereco: ";
+        	getline(cin,inst[i].endereco);
+			
+			for(int p=0;p != 1){
+				cout << "Codigo da Cidade: ";
+				cin >> ins[i].codigoCidade;
+				
+				int j = 0, f = t-1;
+    			int m = (j + f) / 2;
+    			
+				for (; f >= j && m > 0 && inst[i].codigo_cidade != vetorCidade[m].codigo; m = (j + f) / 2){
+        			if (inst[i].codigo_cidade > vetorCidade[m].codigo){
+						i = m + 1;
+					}	
+        			else{
+						f = m - 1;
+					}	
+   				}
+				   
+				if(inst[i].codigoCidade == vetorCidades[m].codigo){
+					cout << "Cidade: " << vetorCidades[m].nome << ">>" << vetorCidades[m].uf << endl;
+					y=1;	
+				}
+				
+				else{
+					cout << "\nCidade invalida!\n";	
+				}						   	
+			}			
+		}	
+		
+		else{
+			saida = 0;
 			cout<<"Codigo Invalido ";	
-		}
-    }
-    cont = i-1;
-}
-	
-	
+		}			
+	}
+    cont = i-1;	
 }
 
 void inclusao_instrutor (struct instrutor S[], int contS, struct instrutor T[], int contT, struct instrutor A[], int &contA){
@@ -162,8 +172,3 @@ void inclusao_instrutor (struct instrutor S[], int contS, struct instrutor T[], 
     }
     contA = k;
 }
-
-
-
-
-
