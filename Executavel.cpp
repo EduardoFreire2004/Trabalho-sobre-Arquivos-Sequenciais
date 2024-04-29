@@ -71,22 +71,22 @@ void Leitura_Curso(struct Curso curso[],int &cont){
         cout<<"Codigo do Curso: ";
         cin>>curso[i].codigo;
         cin.ignore();
-        if(curso[i].codigo != 0 && curso[i] > 0){
+        if(curso[i].codigo != 0 && curso[i].codigo > 0){
         	cout<<"Descricao: ";
         	getline(cin,curso[i].descricao);
         	cout<<"Valor por aula: ";
-        	getline(cin,curso[i].valor_por_aula);	
+        	cin>>curso[i].valor_por_aula;
 		}
     	else {
-			saida = 0
-			cout<<"Codigo Invalido ";	
+			saida = 0;
+			cout<<"Codigo Invalido ";
 		}
-					
+
     }
     cont = i-1;
 }
 
-void Leitura_instrutor(struct instrutor inst[], struct cidade vetorCidades[], int &cont){
+void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidades[], int &cont){
 	int i = 0;
 
 	cout << "\n\nLeitura de Instrutores\n";
@@ -94,50 +94,50 @@ void Leitura_instrutor(struct instrutor inst[], struct cidade vetorCidades[], in
         cout<<"Codigo do Instrutor: ";
         cin>>inst[i].codigo;
         cin.ignore();
-        if(inst[i].codigo != 0 && inst[i] > 0){
+        if(inst[i].codigo != 0 && inst[i].codigo > 0){
         	cout<<"Nome: ";
-        	getline(cin,ins[i].nome);
+        	getline(cin,inst[i].nome);
         	cout<<"Endereco: ";
         	getline(cin,inst[i].endereco);
-			
-			for(int p=0;p != 1){
+
+			for(int p=0;p != 1;){
 				cout << "Codigo da Cidade: ";
-				cin >> ins[i].codigoCidade;
-				
+				cin >> inst[i].codigo_cidade;
+
 				int j = 0, f = t-1;
     			int m = (j + f) / 2;
-    			
-				for (; f >= j && m > 0 && inst[i].codigo_cidade != vetorCidade[m].codigo; m = (j + f) / 2){
-        			if (inst[i].codigo_cidade > vetorCidade[m].codigo){
+
+				for (; f >= j && m > 0 && inst[i].codigo_cidade != vetorCidades[m].codigo; m = (j + f) / 2){
+        			if (inst[i].codigo_cidade > vetorCidades[m].codigo){
 						i = m + 1;
-					}	
+					}
         			else{
 						f = m - 1;
-					}	
+					}
    				}
-				   
+
 				if(inst[i].codigoCidade == vetorCidades[m].codigo){
 					cout << "Cidade: " << vetorCidades[m].nome << ">>" << vetorCidades[m].uf << endl;
-					y=1;	
+					y=1;
 				}
-				
+
 				else{
-					cout << "\nCidade invalida!\n";	
-				}						   	
-			}			
-		}	
-		
+					cout << "\nCidade invalida!\n";
+				}
+			}
+		}
+
 		else{
 			saida = 0;
-			cout<<"Codigo Invalido ";	
-		}			
+			cout<<"Codigo Invalido ";
+		}
 	}
-    cont = i-1;	
+    cont = i-1;
 }
 
-void inclusao_instrutor (struct instrutor S[], int contS, struct instrutor T[], int contT, struct instrutor A[], int &contA){
-    int i = 0, j = 0, k = 0; 
-    
+void inclusao_instrutor (struct Instrutor S[], int contS, struct Instrutor T[], int contT, struct Instrutor A[], int &contA){
+    int i = 0, j = 0, k = 0;
+
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
@@ -171,4 +171,70 @@ void inclusao_instrutor (struct instrutor S[], int contS, struct instrutor T[], 
         k++;
     }
     contA = k;
+}
+
+void inclusao_Alunos (struct Aluno S[], int contS, struct Aluno T[], int contT, struct Aluno A[], int &contA){
+    int i = 0, j = 0, k = 0;
+
+	for (;i < contS && j < contT;k++){
+        if (S[i].codigo < T[j].codigo){
+            A[k].codigo = S[i].codigo;
+            strcpy (A[k].nome,S[i].nome);
+            strcpy (A[k].endereco,S[i].endereco);
+            strcpy (A[k].codigo_cidade,S[i].codigo_cidade);
+            i++;
+            }
+        else {
+            A[k].codigo = T[j].codigo;
+            strcpy (A[k].nome,T[j].nome);
+            strcpy (A[k].endereco,T[j].endereco);
+            strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+            j++;
+        }
+    }
+    while (i < contS){
+        A[k].codigo = S[i].codigo;
+        strcpy (A[k].nome,S[i].nome);
+        strcpy (A[k].endereco,S[i].endereco);
+		strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        i++;
+        k++;
+    }
+    while (j < contT){
+        A[k].codigo = T[j].codigo;
+        strcpy (A[k].nome,T[j].nome);
+        strcpy (A[k].endereco,T[j].endereco);
+        strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        j++;
+        k++;
+    }
+    contA = k;
+}
+
+int main(){
+	int n;
+
+	while( n!=0 n>0){
+
+	cout<<"MENU LEITURAS";
+	cout<<"1 - Cidade"<<endl;
+	cout<<"2 - Instrutor"<<endl;
+	cout<<"3 - inclusao instrutor"<<endl;
+	cin>>n;
+
+	switch(n){
+		case 1:
+			Cidade v[t];
+			int contcidade=0;
+			Leitura_cidade(v,contcidade);
+		break;
+
+		case 2:
+			Instrutor vInstrutor[t];
+			int contInstrutor=0;
+			Leitura_instrutor(v,contInstrutor);
+		break;
+
+		}
+	}
 }
