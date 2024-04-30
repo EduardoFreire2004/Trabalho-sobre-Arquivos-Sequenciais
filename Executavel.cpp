@@ -1,4 +1,4 @@
-#include <iostream>]
+#include <iostream>
 #include <string.h>
 #include <conio.h>
 using namespace std;
@@ -47,11 +47,11 @@ struct Matricula{
     int valor_total;
 };
 //1
-void Leitura_Cidade(struct Cidade cidade[],int &cont){
+void Leitura_cidade(struct Cidade cidade[],int &cont){
     int i = 0;
-    cout << "\n\nLeitura de Cidades\n";
+    cout << "\n\nLeitura de Cidades"<<endl;
 	for (int saida = 1; i < t && saida != 0; i++){
-		cout << "\nCodigo da Cidade: ";
+		cout << "Codigo da Cidade: ";
         cin >> cidade[i].codigo;
         cin.ignore();
         if (cidade[i].codigo != 0){
@@ -64,9 +64,9 @@ void Leitura_Cidade(struct Cidade cidade[],int &cont){
     }
     cont = i-1;
 }
-void Leitura_Curso(struct Curso curso[],int &cont){
+void Leitura_curso(struct Curso curso[],int &cont){
     int i = 0;
-	cout << "\n\nLeitura de Cursos\n";
+	cout << "\n\nLeitura de Cursos"<<endl;
 	for(int saida = 1; i < t && saida != 0; i++){
         cout<<"Codigo do Curso: ";
         cin>>curso[i].codigo;
@@ -86,10 +86,26 @@ void Leitura_Curso(struct Curso curso[],int &cont){
     cont = i-1;
 }
 
-void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidades[], int &cont){
-	int i = 0;
+int Busca_instrutor (struct Cidade v[], int cod){
+    int i = 0, f = 10;
+    int m = (i + f) / 2;
+    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
+        if (cod > v[m].codigo)
+            i = m + 1;
+        else
+            f = m - 1;
+    }
+    if (cod == v[m].codigo){
+        return 1;
+    }
+    else return 0;
+}
 
-	cout << "\n\nLeitura de Instrutores\n";
+void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidade[], int &cont){
+	int i = 0;
+	int invalido;
+
+	cout << "\n\nLeitura de Instrutores"<<endl;
 	for(int saida = 1; i < t && saida != 0; i++){
         cout<<"Codigo do Instrutor: ";
         cin>>inst[i].codigo;
@@ -98,35 +114,25 @@ void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidades[], in
         	cout<<"Nome: ";
         	getline(cin,inst[i].nome);
         	cout<<"Endereco: ";
-        	getline(cin,inst[i].endereco);
-
-			for(int p=0;p != 1;){
-				cout << "Codigo da Cidade: ";
-				cin >> inst[i].codigo_cidade;
-
-				int j = 0, f = t-1;
-    			int m = (j + f) / 2;
-
-				for (; f >= j && m > 0 && inst[i].codigo_cidade != vetorCidades[m].codigo; m = (j + f) / 2){
-        			if (inst[i].codigo_cidade > vetorCidades[m].codigo){
-						i = m + 1;
-					}
-        			else{
-						f = m - 1;
-					}
-   				}
-
-				if(inst[i].codigoCidade == vetorCidades[m].codigo){
-					cout << "Cidade: " << vetorCidades[m].nome << ">>" << vetorCidades[m].uf << endl;
-					y=1;
+			getline(cin,inst[i].endereco);
+			do{
+				invalido=-1;
+				cout<<"Codigo cidade: ";
+				int codcidade;
+				cin>>codcidade;
+				inst[i].codigo_cidade = codcidade;
+				if(Busca_instrutor(vetorCidade,codcidade) == 1){
+				cout<<"Cidade: "<<vetorCidade[i].nome<<"---"<<vetorCidade[i].uf<<endl;
+				invalido=-1;
+			
 				}
-
 				else{
-					cout << "\nCidade invalida!\n";
+				cout<<"Codigo Cidade Invalido";
+				invalido=-1;
 				}
 			}
+			while(invalido);		
 		}
-
 		else{
 			saida = 0;
 			cout<<"Codigo Invalido ";
@@ -141,32 +147,32 @@ void inclusao_instrutor (struct Instrutor S[], int contS, struct Instrutor T[], 
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
-            strcpy (A[k].nome,S[i].nome);
-            strcpy (A[k].endereco,S[i].endereco);
-            strcpy (A[k].codigo_cidade,S[i].codigo_cidade);
+            A[k].nome = S[i].nome;
+            A[k].endereco = S[i].endereco;
+            A[k].codigo_cidade = S[i].codigo_cidade;
             i++;
             }
         else {
             A[k].codigo = T[j].codigo;
-            strcpy (A[k].nome,T[j].nome);
-            strcpy (A[k].endereco,T[j].endereco);
-            strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+            A[k].nome = T[j].nome;
+            A[k].endereco = T[j].endereco;
+            A[k].codigo_cidade = T[j].codigo_cidade;
             j++;
         }
     }
     while (i < contS){
         A[k].codigo = S[i].codigo;
-        strcpy (A[k].nome,S[i].nome);
-        strcpy (A[k].endereco,S[i].endereco);
-		strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        A[k].nome = S[i].nome;
+        A[k].endereco = S[i].endereco;
+		A[k].codigo_cidade = T[j].codigo_cidade;
         i++;
         k++;
     }
     while (j < contT){
         A[k].codigo = T[j].codigo;
-        strcpy (A[k].nome,T[j].nome);
-        strcpy (A[k].endereco,T[j].endereco);
-        strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        A[k].nome = T[j].nome;
+        A[k].endereco = T[j].endereco;
+        A[k].codigo_cidade = T[j].codigo_cidade;
         j++;
         k++;
     }
@@ -179,32 +185,32 @@ void inclusao_Alunos (struct Aluno S[], int contS, struct Aluno T[], int contT, 
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
-            strcpy (A[k].nome,S[i].nome);
-            strcpy (A[k].endereco,S[i].endereco);
-            strcpy (A[k].codigo_cidade,S[i].codigo_cidade);
+            A[k].nome = S[i].nome;
+            A[k].endereco = S[i].endereco;
+            A[k].codigo_cidade = S[i].codigo_cidade;
             i++;
             }
         else {
             A[k].codigo = T[j].codigo;
-            strcpy (A[k].nome,T[j].nome);
-            strcpy (A[k].endereco,T[j].endereco);
-            strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+            A[k].nome = T[j].nome;
+            A[k].endereco = T[j].endereco;
+            A[k].codigo_cidade = T[j].codigo_cidade;
             j++;
         }
     }
     while (i < contS){
         A[k].codigo = S[i].codigo;
-        strcpy (A[k].nome,S[i].nome);
-        strcpy (A[k].endereco,S[i].endereco);
-		strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        A[k].nome = S[i].nome;
+        A[k].endereco = S[i].endereco;
+		A[k].codigo_cidade = T[j].codigo_cidade;
         i++;
         k++;
     }
     while (j < contT){
         A[k].codigo = T[j].codigo;
-        strcpy (A[k].nome,T[j].nome);
-        strcpy (A[k].endereco,T[j].endereco);
-        strcpy (A[k].codigo_cidade,T[j].codigo_cidade);
+        A[k].nome = T[j].nome;
+        A[k].endereco = T[j].endereco;
+        A[k].codigo_cidade = T[j].codigo_cidade;
         j++;
         k++;
     }
@@ -212,29 +218,45 @@ void inclusao_Alunos (struct Aluno S[], int contS, struct Aluno T[], int contT, 
 }
 
 int main(){
-	int n;
-
-	while( n!=0 n>0){
-
-	cout<<"MENU LEITURAS";
-	cout<<"1 - Cidade"<<endl;
-	cout<<"2 - Instrutor"<<endl;
-	cout<<"3 - inclusao instrutor"<<endl;
-	cin>>n;
-
-	switch(n){
-		case 1:
-			Cidade v[t];
-			int contcidade=0;
-			Leitura_cidade(v,contcidade);
-		break;
-
-		case 2:
-			Instrutor vInstrutor[t];
-			int contInstrutor=0;
-			Leitura_instrutor(v,contInstrutor);
-		break;
-
+	int n = 0;
+	int invalido;
+	
+	
+	do{
+		cout<<"MENU LEITURAS" <<endl;
+		cout<<"1 - Cidade"<<endl;
+		cout<<"2 - Curso"<<endl;
+		cout<<"3 - Instrutor"<<endl;
+		cin>>n;
+		invalido=9;
+		Cidade v[t];
+		switch(n){
+			case 1:{
+				int contcidade=0;
+				Leitura_cidade(v,contcidade);
+				break;
+			}
+				
+			case 2:{
+				Curso vcurso[t];
+				int contcurso=0;
+				Leitura_curso(vcurso,contcurso);
+				break;
+			}
+		
+			case 3:{
+				Instrutor vinstrutor[t];
+				int continstrutor=0;
+				Leitura_instrutor(vinstrutor,v,continstrutor);
+				break;
+			}
+			default:{
+				cout<<"Opção inválida\n"<<endl;
+        		invalido= 9;
+				break;
+			}
 		}
-	}
+	
+	}	while(invalido);
+	
 }
