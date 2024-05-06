@@ -3,7 +3,7 @@
 #include <conio.h>
 using namespace std;
 
-#define t 10
+#define z 10
 
 struct Cidade{
     int codigo;
@@ -50,7 +50,7 @@ struct Matricula{
 void Leitura_cidade(struct Cidade cidade[],int &cont){
     int i = 0;
     cout << "\n\nLeitura de Cidades"<<endl;
-	for (int saida = 1; i < t && saida != 0; i++){
+	for (int saida = 1; i < z && saida != 0; i++){
 		cout << "Codigo da Cidade: ";
         cin >> cidade[i].codigo;
         cin.ignore();
@@ -67,7 +67,7 @@ void Leitura_cidade(struct Cidade cidade[],int &cont){
 void Leitura_curso(struct Curso curso[],int &cont){
     int i = 0;
 	cout << "\n\nLeitura de Cursos"<<endl;
-	for(int saida = 1; i < t && saida != 0; i++){
+	for(int saida = 1; i < z && saida != 0; i++){
         cout<<"Codigo do Curso: ";
         cin>>curso[i].codigo;
         cin.ignore();
@@ -87,7 +87,7 @@ void Leitura_curso(struct Curso curso[],int &cont){
 }
 
 int Busca_cidade (struct Cidade v[], int cod){
-    int i = 0, f = t-1;
+    int i = 0, f = z-1;
     int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
         if (cod > v[m].codigo)
@@ -101,42 +101,62 @@ int Busca_cidade (struct Cidade v[], int cod){
     else return -1;
 }
 
+int Busca_instrutor (struct Instrutor v[], int cod){
+    int i = 0, f = z-1;
+    int m = (i + f) / 2;
+    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
+        if (cod > v[m].codigo)
+            i = m + 1;
+        else
+            f = m - 1;
+    }
+    if (cod == v[m].codigo){
+		return -2;
+    }
+    else return -1;
+}
+
 void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidade[], int &cont){
 	int i = 0,x=0;
     int buscaR = 0;
 	cout << "\n\nLeitura de Instrutores"<<endl;
-	for(int saida = 1; i < t && saida != 0; i++){
+	for(int saida = 1; i < z && saida != 0; i++){
         cout<<"Codigo do Instrutor: ";
         cin>>inst[i].codigo;
         cin.ignore();
-        if(inst[i].codigo > 0){
-        	cout<<"Nome: ";
-        	getline(cin,inst[i].nome);
-        	cout<<"Endereco: ";
-			getline(cin,inst[i].endereco);
+		if(Busca_instrutor(inst,inst[i].codigo) != -2){
+        	if(inst[i].codigo > 0){
+        		cout<<"Nome: ";
+        		getline(cin,inst[i].nome);
+        		cout<<"Endereco: ";
+				getline(cin,inst[i].endereco);
 
-            for(;x != -1;){
-				cout<<"Codigo cidade: ";
-				cin>>inst[i].codigo_cidade;
-                cin.ignore();
-				if(Busca_cidade(vetorCidade,inst[i].codigo_cidade) != -1){
-                    buscaR=Busca_cidade(vetorCidade,inst[i].codigo_cidade);
-                    cout<<"Cidade: "<<vetorCidade[buscaR].nome<<"---"<<vetorCidade[buscaR].uf<<endl;
-                    x=-1;
-				}
+            	for(;x != -1;){
+					cout<<"Codigo cidade: ";
+					cin>>inst[i].codigo_cidade;
+                	cin.ignore();
+					if(Busca_cidade(vetorCidade,inst[i].codigo_cidade) != -1){
+                    	buscaR=Busca_cidade(vetorCidade,inst[i].codigo_cidade);
+                    	cout<<"Cidade: "<<vetorCidade[buscaR].nome<<"---"<<vetorCidade[buscaR].uf<<endl;
+                    	x=-1;
+					}
 
-
-				else{
-					cout<<"Codigo Cidade Invalido";
-				}
-            }
-
+					else{
+						cout<<"Codigo Cidade Invalido"<<endl;
+					}
+            	}
+			}
+			else{
+				saida = 0;
+				cout<<"Codigo Invalido "<<endl;
+				x= -1;
+			}
 		}
 		else{
+			cout<<"Codigo ja existe "<<endl;
 			saida = 0;
-			cout<<"Codigo Invalido ";
-			x= -1;
 		}
+			
 	}
     cont = i-1;
 }
@@ -179,6 +199,65 @@ void inclusao_instrutor (struct Instrutor S[], int contS, struct Instrutor T[], 
     contA = k;
 }
 
+int Busca_aluno (struct Aluno v[], int cod){
+    int i = 0, f = z-1;
+    int m = (i + f) / 2;
+    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
+        if (cod > v[m].codigo)
+            i = m + 1;
+        else
+            f = m - 1;
+    }
+    if (cod == v[m].codigo){
+		return -2;
+    }
+    else return -1;
+}
+
+void Leitura_aluno(struct Aluno aluno[], struct Cidade vetorCidade[], int &cont){
+	int i = 0,x=0;
+    int buscaR = 0;
+	cout << "\n\nLeitura de Alunos"<<endl;
+	for(int saida = 1; i < z && saida != 0; i++){
+        cout<<"Codigo do Aluno: ";
+        cin>>aluno[i].codigo;
+        cin.ignore();
+		if(Busca_aluno(aluno,aluno[i].codigo) != -2){
+        	if(aluno[i].codigo > 0){
+        		cout<<"Nome: ";
+        		getline(cin,aluno[i].nome);
+        		cout<<"Endereco: ";
+				getline(cin,aluno[i].endereco);
+
+            	for(;x != -1;){
+					cout<<"Codigo cidade: ";
+					cin>>aluno[i].codigo_cidade;
+                	cin.ignore();
+					if(Busca_cidade(vetorCidade,aluno[i].codigo_cidade) != -1){
+                    	buscaR=Busca_cidade(vetorCidade,aluno[i].codigo_cidade);
+                    	cout<<"Cidade: "<<vetorCidade[buscaR].nome<<"---"<<vetorCidade[buscaR].uf<<endl;
+                    	x=-1;
+					}
+
+					else{
+						cout<<"Codigo Cidade Invalido"<<endl;
+					}
+            	}
+			}
+			else{
+				saida = 0;
+				cout<<"Codigo Invalido "<<endl;
+				x= -1;
+			}
+		}
+		else{
+			cout<<"Codigo ja existe "<<endl;
+			i=i-1;
+		}	
+	}
+    cont = i-1;
+}
+
 void inclusao_Alunos (struct Aluno S[], int contS, struct Aluno T[], int contT, struct Aluno A[], int &contA){
     int i = 0, j = 0, k = 0;
 
@@ -217,10 +296,35 @@ void inclusao_Alunos (struct Aluno S[], int contS, struct Aluno T[], int contT, 
     contA = k;
 }
 
+void exclusao_alunos (struct Aluno S[], int contS, int T[], int contT, struct Aluno A[], int &contA){
+    int i = 0, j = 0, k = 0; 
+    for (;j < contT; i++){
+        if (S[i].codigo != T[j]){
+            A[k].codigo = S[i].codigo;
+            A[k].nome = S[i].nome;
+            A[k].endereco = S[i].endereco;
+            A[k].codigo_cidade = S[i].codigo_cidade;
+            k++;
+            }
+        else {
+            j++;
+        }
+    }
+    while (i < contS){
+        A[k].codigo = S[i].codigo;
+        A[k].nome = S[i].nome;
+        A[k].endereco = S[i].endereco;
+        A[k].codigo_cidade = S[i].codigo_cidade;
+        i++;
+        k++;
+    }
+    contA = k;
+}
+
 int main(){
 	int n = 0;
 	int invalido;
-	Cidade v[t];
+	Cidade v[z];
     int contcidade=0;
 
 	do{
@@ -240,20 +344,20 @@ int main(){
 			}
 
 			case 2:{
-				Curso vcurso[t];
+				Curso vcurso[z];
 				int contcurso=0;
 				Leitura_curso(vcurso,contcurso);
 				break;
 			}
 
 			case 3:{
-				Instrutor vinstrutor[t];
+				Instrutor vinstrutor[z];
 				int continstrutor=0;
 				Leitura_instrutor(vinstrutor,v,continstrutor);
 				break;
 			}
 			case 4:{
-				 struct Instrutor arqS[t], arqT[t], arqA[t];
+				 struct Instrutor arqS[z], arqT[z], arqA[z];
    				 int contS, contT, contA;
     			cout << "\n\nLeitura do Arquivo S";
     			Leitura_instrutor (arqS,v,contS);
@@ -266,7 +370,7 @@ int main(){
         		cout << "\tNome: " << arqA[i].nome;
         		cout << "\tEndereco: " << arqA[i].endereco;
 				}break;
-                }
+            }
 
 
 			default:{
@@ -274,8 +378,8 @@ int main(){
         		invalido= 9;
 				break;
 			}
-
-
-	}	while(invalido);
+		}
+	
+	}while(invalido);
 
 }
