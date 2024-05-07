@@ -49,7 +49,8 @@ struct Matricula{
 //1
 void Leitura_cidade(struct Cidade cidade[],int &cont){
     int i = 0;
-    cout << "\n\nLeitura de Cidades"<<endl;
+    cout << "\nLeitura de Cidades"<<endl;
+    
 	for (int saida = 1; i < z && saida != 0; i++){
 		cout << "Codigo da Cidade: ";
         cin >> cidade[i].codigo;
@@ -343,46 +344,50 @@ void exclusao_alunos (struct Aluno S[], int contS, int T[], int contT, struct Al
 int main(){
 	int n = 0;
 	int invalido;
-	Cidade v[z];
-    int contcidade=0;
+	Cidade cidadeV[z];
+    int contCidade=0;
 
 	do{
-		cout<<"MENU LEITURAS" <<endl;
-		cout<<"1 - Cidade"<<endl;
-		cout<<"2 - Curso"<<endl;
-		cout<<"3 - Instrutor"<<endl;
-		cout<<"4 - ALUNO"<<endl;
-		cout<<"5 - Inclusao instrutor"<<endl;
+		cout<<" ________________________"<<endl;
+		cout<<"| MENU LEITURAS 	 |" <<endl;
+		cout<<"| 1 - Cidade		 |"<<endl;
+		cout<<"| 2 - Curso		 |"<<endl;
+		cout<<"| 3 - Instrutor		 |"<<endl;
+		cout<<"| 4 - ALUNO 		 |"<<endl;
+		cout<<"| 5 - Inclusao instrutor |"<<endl;
+		cout<<"|________________________|"<<endl;
+		cout<<"\nDigite a instrucao: ";
 		cin>>n;
+		
 		invalido=9;
 
 		switch(n){
 			case 1:{
 
-				Leitura_cidade(v,contcidade);
+				Leitura_cidade(cidadeV,contCidade);
 				break;
 			}
 
 			case 2:{
-				Curso vcurso[z];
-				int contcurso=0;
-				Leitura_curso(vcurso,contcurso);
+				Curso cursoV[z];
+				int contCurso=0;
+				Leitura_curso(cursoV,contCurso);
 				break;
 			}
 
 			
 			case 3:{
-				Instrutor vinstrutor[z];
-				Instrutor Finstrutor[z];
-				int continstrutor=0;
-				Leitura_instrutor(vinstrutor,Finstrutor,v,continstrutor,contcidade);
+				Instrutor instrutorV[z];
+				Instrutor instrutorF[z];
+				int contInstrutor=0;
+				Leitura_instrutor(instrutorV,instrutorF,cidadeV,contInstrutor,contCidade);
 				break;
 			}
 			
 			case 4:{
 				Aluno Valuno[z];
 				int contAluno=0;
-				Leitura_aluno(Valuno,v,contAluno,contcidade);
+				Leitura_aluno(Valuno,cidadeV,contAluno,contCidade);
 				break;
 			}
 			
