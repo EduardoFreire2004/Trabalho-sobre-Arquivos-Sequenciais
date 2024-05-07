@@ -121,9 +121,11 @@ void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidade[], int
     int buscaR = 0;
 	cout << "\n\nLeitura de Instrutores"<<endl;
 	for(int saida = 1; i < z && saida != 0; i++){
-        cout<<"Codigo do Instrutor: ";
+        do{
+		cout<<"Codigo do Instrutor: ";
         cin>>inst[i].codigo;
         cin.ignore();
+	 	
 		if(Busca_instrutor(inst,inst[i].codigo) != -2){
         	if(inst[i].codigo > 0){
         		cout<<"Nome: ";
@@ -156,7 +158,7 @@ void Leitura_instrutor(struct Instrutor inst[], struct Cidade vetorCidade[], int
 			cout<<"Codigo ja existe "<<endl;
 			saida = 0;
 		}
-			
+		}while(Busca_instrutor(inst,inst[i].codigo) != -2 )	;
 	}
     cont = i-1;
 }
