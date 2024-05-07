@@ -49,16 +49,19 @@ struct Matricula{
 //1
 void Leitura_cidade(struct Cidade cidade[],int &cont){
     int i = 0;
-    cout << "\nLeitura de Cidades"<<endl;
+	cout << "\n Leitura de Cidades"<<endl;
     
 	for (int saida = 1; i < z && saida != 0; i++){
-		cout << "Codigo da Cidade: ";
+		cout<<" --------------------------"<<endl;
+		cout << " Codigo da Cidade: ";
         cin >> cidade[i].codigo;
         cin.ignore();
         if (cidade[i].codigo > 0){
-            cout << "Nome: ";
+            cout<<" --------------------------"<<endl;
+			cout << " Nome: ";
             getline(cin,cidade[i].nome);
-            cout << "UF: ";
+           	cout<<" --------------------------"<<endl;
+		    cout << " UF: ";
             getline(cin,cidade[i].uf);
         }
         else saida = 0;
@@ -69,18 +72,21 @@ void Leitura_curso(struct Curso curso[],int &cont){
     int i = 0;
 	cout << "\n\nLeitura de Cursos"<<endl;
 	for(int saida = 1; i < z && saida != 0; i++){
-        cout<<"Codigo do Curso: ";
+        cout<<" --------------------------"<<endl;
+		cout<<" Codigo do Curso: ";
         cin>>curso[i].codigo;
         cin.ignore();
         if(curso[i].codigo > 0){
-        	cout<<"Descricao: ";
+        	cout<<" --------------------------"<<endl;
+			cout<<" Descricao: ";
         	getline(cin,curso[i].descricao);
-        	cout<<"Valor por aula: ";
+        	cout<<" --------------------------"<<endl;
+			cout<<" Valor por aula: ";
         	cin>>curso[i].valor_por_aula;
 		}
     	else {
 			saida = 0;
-			cout<<"Codigo Invalido ";
+			cout<<" Codigo Invalido "<<endl;
 		}
 
     }
@@ -89,7 +95,6 @@ void Leitura_curso(struct Curso curso[],int &cont){
 
 int Busca_cidade (struct Cidade v[], int cod,int cont){
     int i = 0,  f=cont;
-   
     int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
         if (cod > v[m].codigo)
@@ -103,8 +108,8 @@ int Busca_cidade (struct Cidade v[], int cod,int cont){
     else return -1;
 }
 
-int Busca_instrutor (struct Instrutor v[], int cod,int cont){
-    int i = 0, f = cont;
+bool Busca_instrutor (struct Instrutor v[], int cod,int cont){
+    int i = 0, f = cont -1 ;
     int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
         if (cod > v[m].codigo)
@@ -112,35 +117,17 @@ int Busca_instrutor (struct Instrutor v[], int cod,int cont){
         else
             f = m - 1;
     }
-    if (cod == v[m].codigo){
-		return 0;
-    }
-    else return -1;
+    if( f != -1){
+    	if (cod == v[m].codigo){
+		return false;
+    	}
+    	else return true ;
+	}
+	else return true;
+
 }
 
-
-bool buscaSerialInstrutor(Instrutor vetorInstrutor[], int cod, int cont) {
-    int i = 0;
-    for (; i < cont; i++) {
-        if (cod == vetorInstrutor[i].codigo) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/*bool buscaSerialAluno(aluno vetorAluno[], int cod, int cont) {
-    int i = 0;
-    for (; i < cont; i++) {
-        if (cod == vetorAluno[i].codigo) {
-            return false;
-        }
-    }
-    return true;
-}
-*/
-
-void Leitura_instrutor(struct Instrutor inst[],Instrutor instCadastrado[],struct Cidade vetorCidade[], int &cont,int &contCidade){
+void Leitura_instrutor(struct Instrutor inst[],struct Cidade vetorCidade[], int &cont,int contCidade){
 	int i = 0,x=0;
     int buscaR = 0;
 	cout << "\n\nLeitura de Instrutores"<<endl;
@@ -150,8 +137,9 @@ void Leitura_instrutor(struct Instrutor inst[],Instrutor instCadastrado[],struct
         cin>>inst[i].codigo;
         cin.ignore();
 		if(inst[i].codigo > 0){
-        	if(buscaSerialInstrutor(inst,cont,contCidade) && buscaSerialInstrutor(instCadastrado,cont,contCidade) == true){
-        		cout<<"Nome: ";
+        	
+			if(Busca_instrutor(inst,inst[i].codigo,i) == true){
+				cout<<"Nome: ";
         		getline(cin,inst[i].nome);
         		cout<<"Endereco: ";
 				getline(cin,inst[i].endereco);
@@ -358,6 +346,7 @@ int main(){
 		cout<<"|________________________|"<<endl;
 		cout<<"\nDigite a instrucao: ";
 		cin>>n;
+		system("cls");
 		
 		invalido=9;
 
@@ -378,9 +367,8 @@ int main(){
 			
 			case 3:{
 				Instrutor instrutorV[z];
-				Instrutor instrutorF[z];
 				int contInstrutor=0;
-				Leitura_instrutor(instrutorV,instrutorF,cidadeV,contInstrutor,contCidade);
+				Leitura_instrutor(instrutorV,cidadeV,contInstrutor,contCidade);
 				break;
 			}
 			
