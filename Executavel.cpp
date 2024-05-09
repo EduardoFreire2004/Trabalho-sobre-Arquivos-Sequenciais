@@ -416,7 +416,7 @@ void exclusao_alunos (struct Aluno S[], int contS, int T[], int contT, struct Al
 }
 
 void mostrar (struct Instrutor A[], int contA){
-    cout << "\n\nLista dos Registros no Arquivo Atualizado" << endl;
+    cout << "\n\n Lista dos Registros no Arquivo Atualizado" << endl;
     for (int i = 0; i < contA; i++){
         cout << "\nCodigo: " << A[i].codigo;
         cout << "\tNome: " << A[i].nome;
@@ -478,8 +478,6 @@ int main(){
 			}
 			
 			case 5:{	
-    		
-				cout << "\n\nLeitura do Arquivo T";
     			Leitura_instrutor_inclusao (arqT,cidadeV,instrutorV,contInstrutor,contT,contCidade);
     			inclusao_instrutor (instrutorV,contInstrutor, arqT, contT, arqA, contA);
    				mostrar(arqA,contA);
