@@ -46,50 +46,6 @@ struct Matricula{
     int quantidade_aulas;
     float valor_total;
 };
-//1
-void leitura_cidade(struct Cidade cidade[],int &cont){
-    int i = 0;    
-	
-	for (int saida = 1; i < z && saida != 0; i++){
-		cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
-		cout<<" --------------------------"<<endl;
-		cout << " Codigo da Cidade: ";
-        cin >> cidade[i].codigo;
-        cin.ignore();
-        if (cidade[i].codigo > 0){
-			cout << " Nome da Cidade: ";
-            getline(cin,cidade[i].nome);
-		    cout << " UF da Cidade: ";
-            getline(cin,cidade[i].uf);
-            cout<<" --------------------------"<<endl;
-        }
-        else saida = 0;
-    }
-    cont = i-1;
-}
-void leitura_curso(struct Curso curso[],int &cont){
-    int i = 0;
-	for(int saida = 1; i < z && saida != 0; i++){
-		cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
-        cout<<" --------------------------"<<endl;
-		cout<<" Codigo do Curso: ";
-        cin>>curso[i].codigo;
-        cin.ignore();
-        if(curso[i].codigo > 0){
-			cout<<" Descricao do Curso: ";
-        	getline(cin,curso[i].descricao);
-			cout<<" Valor por Aula: ";
-        	cin>>curso[i].valor_por_aula;
-        	cin.ignore();
-        	cout<<" --------------------------"<<endl;
-
-		}
-		else saida = 0;
-
-    	
-    }
-    cont = i-1;
-}
 
 int busca_cidade (struct Cidade v[], int cod,int cont){
     int i = 0,  f=cont -1;
@@ -106,10 +62,63 @@ int busca_cidade (struct Cidade v[], int cod,int cont){
     else return -1;
 }
 
+void leitura_cidade(struct Cidade cidade[],int &cont){
+    int i = 0;    
+	for (int saida = 1; i < z && saida != 0; i++){
+		cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
+		cout<<" --------------------------"<<endl;
+		cout << " Codigo da Cidade: ";
+        cin >> cidade[i].codigo;
+        cin.ignore();
+		if (cidade[i].codigo > 0){
+			cout << " Nome da Cidade: ";
+            getline(cin,cidade[i].nome);
+		    cout << " UF da Cidade: ";
+            getline(cin,cidade[i].uf);
+            cout<<" --------------------------"<<endl;
+        }
+        else saida = 0;
+    }
+    cont = i-1;
+}
+
+int busca_curso (struct Curso v[], int cod,int cont){
+	int i = 0,  f=cont -1;
+    int m = (i + f) / 2;
+	for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
+        if (cod > v[m].codigo)
+            i = m + 1;
+        else
+            f = m - 1;
+    }
+	if (cod == v[m].codigo){
+		return m;
+    }
+    else return -1;
+}
+
+void leitura_curso(struct Curso curso[],int &cont){
+	int i = 0;
+	for(int saida = 1; i < z && saida != 0; i++){
+		cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
+        cout<<" --------------------------"<<endl;
+		cout<<" Codigo do Curso: ";
+        cin>>curso[i].codigo;
+        cin.ignore();
+        if(curso[i].codigo > 0){
+			cout<<" Descricao do Curso: ";
+        	getline(cin,curso[i].descricao);
+			cout<<" Valor por Aula: ";
+        	cin>>curso[i].valor_por_aula;
+        	cin.ignore();
+        	cout<<" --------------------------"<<endl;
+		}
+		else saida = 0;
+    }
+    cont = i-1;
+}
 
 bool busca_instrutor (struct Instrutor v[], int cod,int cont){
-    
-	
 	int i = 0, f = cont -1 ;
 	int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
@@ -118,7 +127,6 @@ bool busca_instrutor (struct Instrutor v[], int cod,int cont){
         else
             f = m - 1;
     }
-    
     if(f != -1){
 	
 		if (cod == v[m].codigo){
@@ -128,32 +136,24 @@ bool busca_instrutor (struct Instrutor v[], int cod,int cont){
 	}else return true;
 }
 
-bool busca_matricula (struct Matricula v[], int cod,int cont){
-    
-	
-	int i = 0, f = cont -1 ;
-	int m = (i + f) / 2;
+int busca_instrutor_turma (struct Instrutor v[], int cod,int cont){
+    int i = 0,  f=cont -1;
+    int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
         if (cod > v[m].codigo)
             i = m + 1;
         else
             f = m - 1;
     }
-    
-    if(f != -1){
-	
-		if (cod == v[m].codigo){
-		return false;
-    	}
-    	else return true ;
-	}else return true;
+    if (cod == v[m].codigo){
+		return m;
+    }
+    else return -1;
 }
-
 
 void leitura_instrutor(struct Instrutor inst[],int &cont,struct Cidade vetorCidade[], int contCidade,struct Instrutor instrutor[],int contInstrutor){
 	int i = 0;
     int buscaR = 0;
-	
 	for(int saida = 1; i < z && saida != 0; i++){	
 		for(int x=1;x != -1;){
 		 	cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
@@ -171,38 +171,32 @@ void leitura_instrutor(struct Instrutor inst[],int &cont,struct Cidade vetorCida
 						cout<<" Codigo da cidade: ";
 						cin>>inst[i].codigo_cidade;
                 		cin.ignore();
-                		
 						if(busca_cidade(vetorCidade,inst[i].codigo_cidade,contCidade) != -1){
                     		buscaR=busca_cidade(vetorCidade,inst[i].codigo_cidade,contCidade);
 							cout<<" Cidade: "<<vetorCidade[buscaR].nome<<"-"<<vetorCidade[buscaR].uf<<endl;
 							cout<<" --------------------------"<<endl;
                     		x=-1;
 						}
-
 						else{
 							cout<<"\n ***Codigo Cidade Invalido***"<<endl;
 						}
             		}
-				
 				}
 				else {
 					cout<<"\n ***Codigo ja existente*** "<<endl;
 				}
-			}else{
-				
+			}
+			else{
 				saida = 0;
 				x= -1;
 			}		
 		}
 	}
-	
     cont = i-1;
-   
 }
 
 void inclusao_instrutor (struct Instrutor S[], int contS, struct Instrutor T[], int contT, struct Instrutor A[], int &contA){
     int i = 0, j = 0, k = 0;
-
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
@@ -238,10 +232,7 @@ void inclusao_instrutor (struct Instrutor S[], int contS, struct Instrutor T[], 
     contA = k;
 }
 
-
 bool busca_aluno (struct Aluno v[], int cod,int cont){
-    
-	
 	int i = 0, f = cont -1 ;
 	int m = (i + f) / 2;
     for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
@@ -250,7 +241,6 @@ bool busca_aluno (struct Aluno v[], int cod,int cont){
         else
             f = m - 1;
     }
-    
     if(f != -1){
 	
 		if (cod == v[m].codigo){
@@ -260,6 +250,20 @@ bool busca_aluno (struct Aluno v[], int cod,int cont){
 	}else return true;
 }
 
+int busca_aluno_matricula (struct Aluno v[], int cod,int cont){
+    int i = 0,  f=cont -1;
+    int m = (i + f) / 2;
+    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
+        if (cod > v[m].codigo)
+            i = m + 1;
+        else
+            f = m - 1;
+    }
+    if (cod == v[m].codigo){
+		return m;
+    }
+    else return -1;
+}
 
 void leitura_aluno(struct Aluno aluno[],int &cont,struct Cidade vetorCidade[],int contCidade,struct Aluno alunos[],int contAlunos){
 	int i = 0,x=0;
@@ -310,7 +314,6 @@ void leitura_aluno(struct Aluno aluno[],int &cont,struct Cidade vetorCidade[],in
 
 void inclusao_aluno (struct Aluno S[], int contS, struct Aluno T[], int contT, struct Aluno A[], int &contA){
     int i = 0, j = 0, k = 0;
-
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
@@ -373,15 +376,12 @@ void exclusao_alunos (struct Aluno S[], int contS, int T[], int contT, struct Al
 
 void leitura_aluno_exclusao(int TExclusao[], int &contTExclusao){
 	int i = 0;
-
-    for (int saida = 1; i < z && saida > 0; i++) {
-            	
+    for (int saida = 1; i < z && saida > 0; i++) {   	
 		cout << "Codigo para exclusao: ";
        	cin >> TExclusao[i];
         cin.ignore();
         saida= TExclusao[i];
     }
-
 	if(TExclusao[z-1] != 0){
 		if (i == z) {
         contTExclusao = i;
@@ -389,36 +389,6 @@ void leitura_aluno_exclusao(int TExclusao[], int &contTExclusao){
         	contTExclusao = i - 1;	
 	}else
 		contTExclusao = i - 1;
-}
-
-int busca_curso (struct Curso v[], int cod,int cont){
-    int i = 0,  f=cont -1;
-    int m = (i + f) / 2;
-    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
-        if (cod > v[m].codigo)
-            i = m + 1;
-        else
-            f = m - 1;
-    }
-    if (cod == v[m].codigo){
-		return m;
-    }
-    else return -1;
-}
-
-int busca_instrutor_turma (struct Instrutor v[], int cod,int cont){
-    int i = 0,  f=cont -1;
-    int m = (i + f) / 2;
-    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
-        if (cod > v[m].codigo)
-            i = m + 1;
-        else
-            f = m - 1;
-    }
-    if (cod == v[m].codigo){
-		return m;
-    }
-    else return -1;
 }
 
 int busca_turma (struct Turma v[], int cod,int cont){
@@ -434,118 +404,69 @@ int busca_turma (struct Turma v[], int cod,int cont){
 		return m;
     }
     else return -1;
-	
 }
 
-bool busca_turmas (struct Turma v[], int cod,int cont){
-    
-	
-	int i = 0, f = cont -1 ;
-	int m = (i + f) / 2;
-    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
-        if (cod > v[m].codigo)
-            i = m + 1;
-        else
-            f = m - 1;
-    }
-    
-    if(f != -1){
-	
-		if (cod == v[m].codigo){
-		return false;
-    	}
-    	else return true ;
-	}else return true;
-}
-
-
-int busca_aluno_matricula (struct Aluno v[], int cod,int cont){
-    int i = 0,  f=cont -1;
-    int m = (i + f) / 2;
-    for (; f >= i && cod != v[m].codigo; m = (i + f) / 2){
-        if (cod > v[m].codigo)
-            i = m + 1;
-        else
-            f = m - 1;
-    }
-    if (cod == v[m].codigo){
-		return m;
-    }
-    else return -1;
-}
-
-void leitura_matricula(struct Matricula matricula[], int &cont, struct Matricula matriculas[],int contMatriculas,struct Aluno aluno[], int contAluno, struct Turma turma[], int contTurma, struct Instrutor instrutor[], int contInstrutor,struct Cidade cidade[],int contCidade,struct Curso curso[],int contCurso){
-	
+void leitura_turmas(struct Turma turma[], int &cont,struct Curso curso[], int contCurso, struct Cidade cidade[], int contCidade, struct Instrutor instrutor[], int contInstrutor){
 	int i = 0,x=0;
-    int buscaR = 0,buscaC = 0;
-    float valorAula = 0;
+    int buscaR = 0;
 	for(int saida = 1; i < z && saida != 0; i++){	
 		for(int x=1;x != -1;){
 			cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
 			cout<<" --------------------------"<<endl;
-			cout<<" Codigo da Matricula: ";
-        	cin>>matricula[i].codigo;
+			cout<<" Codigo da Turma: ";
+        	cin>>turma[i].codigo;
         	cin.ignore();
-			if(matricula[i].codigo > 0){			
-				if(busca_matricula(matricula,matricula[i].codigo,cont) and busca_matricula(matriculas,matricula[i].codigo,contMatriculas) == true){
-				
-					for(;x != -1;){
-						cout<<" Codigo do Aluno: ";
-						cin>>matricula[i].codigo_aluno;
-                		cin.ignore();
-						if(busca_aluno_matricula(aluno,matricula[i].codigo_aluno,contAluno) != -1){
-                    		buscaR=busca_aluno_matricula(aluno,matricula[i].codigo_aluno,contAluno);
-							cout<<" Aluno: "<<aluno[buscaR].nome<<endl;
-							buscaR=busca_cidade(cidade,aluno[buscaR].codigo_cidade,contCidade);
-							cout<<" Cidade: "<<cidade[buscaR].nome << "-" <<cidade[buscaR].uf <<endl;
-                    		x=-1;
-						}
-
-						else{
-							cout<<"\n ***Codigo Aluno Invalido***"<<endl;
-						}
-            		}
-					x=1;
-					for(;x != -1;){
-						cout<<" Codigo da Turma: ";
-						cin>>matricula[i].codigo_turma;
-                		cin.ignore();
-						if(busca_turma(turma,matricula[i].codigo_turma,contTurma) != -1){
-                    		buscaR=busca_turma(turma,matricula[i].codigo_turma,contTurma);
-							buscaC=busca_curso(curso,turma[buscaR].codigo_curso,contCurso);
-							cout<<" Descricao curso: "<<curso[buscaC].descricao<<endl;
-							
-							buscaR=busca_turma(turma,turma[buscaR].codigo_instrutor,contInstrutor);
-							buscaC=busca_instrutor_turma(instrutor,buscaR,contInstrutor);
-							cout<<" Instrutor: "<<instrutor[buscaR].nome<<endl;
-							
-							buscaR=busca_turma(turma,matricula[i].codigo_turma,contTurma);
-							buscaC=busca_curso(curso,turma[buscaR].codigo_curso,contCurso);
-							cout<<" Valor Por Aula: "<<curso[buscaC].valor_por_aula<<endl;
-							valorAula = curso[buscaC].valor_por_aula;
-                    		x=-1;
-						}
-
-						else{
-							cout<<"\n ***Codigo Turma Invalido***"<<endl;
-						}
+			if(turma[i].codigo > 0){			
+				for(;x != -1;){
+					cout<<" Codigo do Curso: ";
+					cin>>turma[i].codigo_curso;
+                	cin.ignore();
+					if(busca_curso(curso,turma[i].codigo_curso,contCurso) != -1){
+                    	buscaR=busca_curso(curso,turma[i].codigo_curso,contCurso);
+						cout<<" Curso: "<<curso[buscaR].descricao<<endl;
+						cout<<" Valor Por Aula: "<<curso[buscaR].valor_por_aula<<endl;
+                    	x=-1;
 					}
-			
-					cout<<" Quantidade de Aulas: ";
-        			cin>>matricula[i].quantidade_aulas;
-        			matricula[i].valor_total = matricula[i].quantidade_aulas*valorAula;
-					cout<< " Valor total: "<<matricula[i].valor_total<<endl;
-					cout<<" --------------------------"<<endl;
-        			x= -1;
-        		}else {
-					cout<<"\n ***Codigo ja existente*** "<<endl;
+					else{
+						cout<<"\n ***Codigo Curso Invalido***"<<endl;
+					}
+            	}
+				x=1;
+				for(;x != -1;){
+					cout<<" Codigo do Instrutor: ";
+					cin>>turma[i].codigo_instrutor;
+                	cin.ignore();
+					if(busca_instrutor_turma(instrutor,turma[i].codigo_instrutor,contInstrutor) != -1){
+                    	buscaR=busca_instrutor_turma(instrutor,turma[i].codigo_instrutor,contInstrutor);
+						cout<<" Instrutor: "<<instrutor[buscaR].nome<<endl;
+						buscaR=busca_cidade(cidade,instrutor[buscaR].codigo_cidade,contCidade);
+						cout<<" Cidade: "<<cidade[buscaR].nome<<"-"<<cidade[buscaR].uf<<endl;
+                    	x=-1;
+					}
+					else{
+						cout<<"\n ***Codigo Instrutor Invalido***"<<endl;
+					}
 				}
+		
+				cout<<" Maximo de Participantes: ";
+        		cin>>turma[i].quant_max_participantes;
+        		x=1;
+				for(;x != -1;){
+					cout<<" Total de Participantes: ";
+        			cin>>turma[i].total_participantes;
+					if(turma[i].total_participantes > turma[i].quant_max_participantes){
+						cout<<"Quantidade Maxima Ultrapassada"<<endl;
+					}
+					else{
+						x=-1;
+						cout<<" --------------------------"<<endl;
+					}
+				}	
 			}	
 			else{
 				saida = 0;
 				x= -1;
 			}			
-		
 		}
 	}    
 	cont = i-1;	
@@ -553,7 +474,6 @@ void leitura_matricula(struct Matricula matricula[], int &cont, struct Matricula
 
 void inclusao_turma (struct Turma S[], int contS, struct Turma T[], int contT, struct Turma A[], int &contA){
     int i = 0, j = 0, k = 0;
-
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
@@ -593,88 +513,72 @@ void inclusao_turma (struct Turma S[], int contS, struct Turma T[], int contT, s
     contA = k;
 }
 
-void leitura_turmas(struct Turma turma[], int &cont,struct Turma turmas[],int contTurmas ,struct Curso curso[], int contCurso, struct Cidade cidade[], int contCidade, struct Instrutor instrutor[], int contInstrutor){
-	
+void leitura_matricula(struct Matricula matricula[], int &cont,struct Aluno aluno[], int contAluno, struct Turma turma[], int contTurma, struct Instrutor instrutor[], int contInstrutor,struct Cidade cidade[],int contCidade,struct Curso curso[],int contCurso){
 	int i = 0,x=0;
-    int buscaR = 0;
+    int buscaR = 0,buscaC = 0;
+    float valorAula = 0;
 	for(int saida = 1; i < z && saida != 0; i++){	
 		for(int x=1;x != -1;){
 			cout<<"\n Registro [ "<<i + 1<<" ]"<<endl;
 			cout<<" --------------------------"<<endl;
-			cout<<" Codigo da Turma: ";
-        	cin>>turma[i].codigo;
+			cout<<" Codigo da Matricula: ";
+        	cin>>matricula[i].codigo;
         	cin.ignore();
-			if(turma[i].codigo > 0){			
-				if(busca_turmas(turma,turma[i].codigo,cont) and busca_turmas(turmas,turma[i].codigo,contTurmas) == true){
-					for(;x != -1;){
-						cout<<" Codigo do Curso: ";
-						cin>>turma[i].codigo_curso;
-                		cin.ignore();
-						if(busca_curso(curso,turma[i].codigo_curso,contCurso) != -1){
-                    		buscaR=busca_curso(curso,turma[i].codigo_curso,contCurso);
-							cout<<" Curso: "<<curso[buscaR].descricao<<endl;
-							cout<<" Valor Por Aula: "<<curso[buscaR].valor_por_aula<<endl;
-                    		x=-1;
-						}
-
-						else{
-							cout<<"\n ***Codigo Curso Invalido***"<<endl;
-						}
-            		}
-					x=1;
-					for(;x != -1;){
-						cout<<" Codigo do Instrutor: ";
-						cin>>turma[i].codigo_instrutor;
-                		cin.ignore();
-						if(busca_instrutor_turma(instrutor,turma[i].codigo_instrutor,contInstrutor) != -1){
-                    		buscaR=busca_instrutor_turma(instrutor,turma[i].codigo_instrutor,contInstrutor);
-						
-							cout<<" Instrutor: "<<instrutor[buscaR].nome<<endl;
-							buscaR=busca_cidade(cidade,instrutor[buscaR].codigo_cidade,contCidade);
-						
-							cout<<" Cidade: "<<cidade[buscaR].nome<<"-"<<cidade[buscaR].uf<<endl;
-                    		x=-1;
-						}
-
-						else{
-							cout<<"\n ***Codigo Instrutor Invalido***"<<endl;
-						}
+			if(matricula[i].codigo > 0){			
+				for(;x != -1;){
+					cout<<" Codigo do Aluno: ";
+					cin>>matricula[i].codigo_aluno;
+                	cin.ignore();
+					if(busca_aluno_matricula(aluno,matricula[i].codigo_aluno,contAluno) != -1){
+                    	buscaR=busca_aluno_matricula(aluno,matricula[i].codigo_aluno,contAluno);
+						cout<<" Aluno: "<<aluno[buscaR].nome<<endl;
+						buscaR=busca_cidade(cidade,aluno[buscaR].codigo_cidade,contCidade);
+						cout<<" Cidade: "<<cidade[buscaR].nome << "-" <<cidade[buscaR].uf <<endl;
+                    	x=-1;
 					}
-			
-					x=1;
-					cout<<" Maximo de Participantes: ";
-        			cin>>turma[i].quant_max_participantes;
-					for(;x != -1;){
-						cout<<" Total de Participantes: ";
-        				cin>>turma[i].total_participantes;
-						if(turma[i].total_participantes > turma[i].quant_max_participantes){
-							cout<<"Quantidade Maxima Ultrapassada"<<endl;
-						}
-						else{
-						x=-1;
-
-							cout<<" --------------------------"<<endl;
-						}
+					else{
+						cout<<"\n ***Codigo Aluno Invalido***"<<endl;
 					}
-				}else {
-					cout<<"\n ***Codigo ja existente*** "<<endl;
-				}	
-			
+            	}
+				x=1;
+				for(;x != -1;){
+					cout<<" Codigo da Turma: ";
+					cin>>matricula[i].codigo_turma;
+                	cin.ignore();
+					if(busca_turma(turma,matricula[i].codigo_turma,contTurma) != -1){
+                    	buscaR=busca_turma(turma,matricula[i].codigo_turma,contTurma);
+						buscaC=busca_curso(curso,turma[buscaR].codigo_curso,contCurso);
+						cout<<" Descricao curso: "<<curso[buscaC].descricao<<endl;	
+						buscaR=busca_turma(turma,turma[buscaR].codigo_instrutor,contInstrutor);
+						cout<<" Instrutor: "<<instrutor[buscaR].nome<<endl;	
+						buscaR=busca_turma(turma,matricula[i].codigo_turma,contTurma);
+						buscaC=busca_curso(curso,turma[buscaR].codigo_curso,contCurso);
+						cout<<" Valor Por Aula: "<<curso[buscaC].valor_por_aula<<endl;
+						valorAula = curso[buscaC].valor_por_aula;
+                    	x=-1;
+					}
+					else{
+						cout<<"\n ***Codigo Turma Invalido***"<<endl;
+					}
+				}
+				cout<<" Quantidade de Aulas: ";
+        		cin>>matricula[i].quantidade_aulas;
+        		matricula[i].valor_total = matricula[i].quantidade_aulas*valorAula;
+				cout<< " Valor total: "<<matricula[i].valor_total<<endl;
+				cout<<" --------------------------"<<endl;
+        		x= -1;
 			}	
 			else{
 				saida = 0;
 				x= -1;
 			}			
-		
 		}
 	}    
 	cont = i-1;	
 }
 
-
 void inclusao_matricula (struct Matricula S[], int contS, struct Matricula T[], int contT, struct Matricula A[], int &contA){
     int i = 0, j = 0, k = 0;
-
 	for (;i < contS && j < contT;k++){
         if (S[i].codigo < T[j].codigo){
             A[k].codigo = S[i].codigo;
@@ -752,34 +656,47 @@ void mostrar_curso (struct Curso A[], int contA){
     }  
 }
 
-void mostrar_turma (struct Turma A[], int contA){
-    cout << "\n\n Registros Turmas" << endl;
+void mostrar_turma (struct Turma turma[], int contTurma,struct Instrutor instrutor[],int contInstrutor,struct Curso curso[],int contCurso,struct Cidade cidade[],int contCidade){
+	int t,buscaT=0;
+	cout << "\n\n Digite o Codigo da Turma: ";
+	cin>>t;
+	t=t-1;
+	if(busca_turma(turma,turma[t].codigo,contTurma)!= -1){
+		buscaT=busca_turma(turma,turma[t].codigo_curso,contTurma);
+		cout<<"\n Curso: "<<curso[buscaT].descricao;
+		buscaT=busca_turma(turma,turma[t].codigo_instrutor,contTurma);
+		cout<<"\t Instrutor: "<<instrutor[buscaT].nome;
+		buscaT=busca_instrutor_turma(instrutor,instrutor[buscaT].codigo_cidade,contInstrutor);
+		cout<<"\t Cidade: "<<cidade[buscaT].nome<<"-"<<cidade[buscaT].uf;
+		cout<<"\t Total de Participantes: "<<turma[t].total_participantes;
+	}
+	else cout<<"\n***Turma nao encontrada***";
+    
+}
+
+void mostrar_matricula (struct Matricula A[], int contA,struct Aluno aluno[],int contAluno,struct Turma turma[],int contTurma,struct Instrutor instrutor[],int contInstrutor,struct Curso curso[],int contCurso){
+    int buscaR=0;
+    int buscaC=0;
+	cout << "\n\n Registros Matriculas" << endl;
     for (int i = 0; i < contA; i++){
-       	cout << "\n  Codigo: " << A[i].codigo;
-        cout << "\t  Codigo Curso: " << A[i].codigo_curso;
-        cout << "\t  Codigo Instrutor: " << A[i].codigo_instrutor;
-        cout << "\t  Total de Participantes: " << A[i].total_participantes;
-        cout << "\t	 Quantidade Maxima de Participantes: " << A[i].quant_max_participantes;
+       	cout << "\n  Codigo Matricula: " << A[i].codigo;
+		if(busca_aluno(aluno,A[i].codigo_aluno,contAluno != -1)){
+			buscaR = busca_aluno(aluno,A[i].codigo_aluno,contAluno);
+			cout << "\t Aluno: " << aluno[buscaR].nome;
+		}
+		if(busca_turma(turma,A[i].codigo_turma,contTurma) != -1){
+			buscaR=busca_turma(turma,A[i].codigo_turma,contTurma);
+			buscaC=busca_curso(curso,turma[buscaR].codigo_curso,contCurso);
+			cout<<"\t Curso: "<<curso[buscaC].descricao;
+			buscaR=busca_turma(turma,turma[buscaR].codigo_instrutor,contInstrutor);
+			cout<<"\t Instrutor: "<<instrutor[buscaR].nome;
+        }
+		cout << "\t	 Valor Total: " << A[i].valor_total;							
     }  
 }
 
-/*void mostrar_matricula (struct Matricula A[], int contA){
-    cout << "\n\n Registros Matriculas" << endl;
-    for (int i = 0; i < contA; i++){
-       	cout << "\n  Codigo: " << A[i].codigo;
-        cout << "\t  Nome aluno: " << A[i].codigo_curso;
-        cout << "\t  Codigo Instrutor: " << A[i].codigo_instrutor;
-        cout << "\t  Total de Participantes: " << A[i].total_participantes;
-        cout << "\t	 Quantidade Maxima de Participantes: " << A[i].quant_max_participantes;
-    }  
-}*/
-
-
-
-
-
 int main(){
-	int menu_principal=0,menu_cidade=0,menu_curso=0,menu_instrutor=0,menu_aluno=0,menu_turma=0,menu_matricula=0;
+	int menu_principal=0,menu_cidade=0,menu_curso=0,menu_instrutor=0,menu_aluno=0,menu_turma=0,menu_turma_consultar=0,menu_matricula=0,menu_sair=0;
 	int invalido;
 	
 	Cidade cidadeV[z];
@@ -802,7 +719,6 @@ int main(){
 	int contMatriculas=0,contMatriculaT=0,contMatriculaS=0;
 	
 	do{
-	
 		cout<<"  ________________________"<<endl;
 		cout<<" |  MENU  PRINCIPAL 	  |" <<endl;
 		cout<<" | 1 - Cidade		  |"<<endl;
@@ -811,13 +727,12 @@ int main(){
 		cout<<" | 4 - Aluno 		  |"<<endl;
 		cout<<" | 5 - Turma 		  |"<<endl;
 		cout<<" | 6 - Matricula	  |"<<endl;
+		cout<<" | 7 - Encerrar	  	  |"<<endl;
 		cout<<" |________________________|"<<endl;
 		cout<<"\n Digite uma opcao: ";
 		cin>>menu_principal;
 		system("cls");
 		
-		invalido=8;
-
 		switch(menu_principal){
 			case 1:{
 				do{
@@ -850,7 +765,6 @@ int main(){
 				}while(menu_cidade != 3);
 				break;
 			}
-
 			case 2:{
 				do{
 					cout<<"  ________________________"<<endl;
@@ -882,7 +796,6 @@ int main(){
 				}while(menu_curso != 3);
 				break;
 			}
-
 			case 3:{
 				do{
 					cout<<"  ___________________________"<<endl;
@@ -923,15 +836,11 @@ int main(){
 							system("cls");
 							break;
 						}
-					
 					}
 				}while(menu_instrutor !=3);	
-				
 				break;
 			}
-			
 			case 4:{
-				
 				do{
 					cout<<"  ________________________"<<endl;
 					cout<<" |  MENU  ALUNO	     	  |" <<endl;
@@ -998,7 +907,8 @@ int main(){
 					}
 				
 				}while(menu_aluno != 4);
-			}
+				break;
+			}		
 			
 			
 			case 5:{	
@@ -1016,7 +926,7 @@ int main(){
 				
 					switch(menu_turma){
 						case 1:{
-							leitura_turmas(turmaT,contTurmaT,turmas,contTurmas,cursoV,contCurso,cidadeV,contCidade,instrutores,contInstrutores);
+							leitura_turmas(turmaT,contTurmaT,cursoV,contCurso,cidadeV,contCidade,instrutores,contInstrutores);
 							inclusao_turma(turmaS,contTurmaS,turmaT,contTurmaT,turmas,contTurmas);
 							system("cls");
 							
@@ -1035,8 +945,34 @@ int main(){
 							break;
 						}
 						case 2:{
-							mostrar_turma(turmas,contTurmas);
-							getch();
+							system("cls");
+							cout<<"  ____________________________"<<endl;
+							cout<<" |  MENU  CONSULTAR           |" <<endl;
+							cout<<" | 1 - Consultar Turmas       |"<<endl;
+							cout<<" | 2 - Consultar Turma Cheias |"<<endl;
+							cout<<" | 3 - Voltar	  	      |"<<endl;
+							cout<<" |____________________________|"<<endl;
+							cout<<"\n Digite uma opcao: ";
+							cin>>menu_turma_consultar;
+							
+							switch(menu_turma_consultar){
+								case 1:{
+									mostrar_turma(turmas,contTurmas,instrutores,contInstrutores,cursoV,contCurso,cidadeV,contCidade);
+									getch();
+									system("cls");
+									break;
+								}
+								case 2:{
+									
+									break;
+								}
+								case 3:{
+									system("cls");
+									break;
+								}	
+								
+							}
+							
 							system("cls");
 							break;
 						}
@@ -1048,7 +984,7 @@ int main(){
 					}
 							
 				}while(menu_turma != 3);
-						
+				break;			
             }
             case 6:{
             	do{
@@ -1064,7 +1000,7 @@ int main(){
             	
             		switch(menu_matricula){
             			case 1:{
-            				leitura_matricula(matriculaT,contMatriculaT,matriculas,contMatriculas,alunos,contAlunos,turmas,contTurmas,instrutores,contInstrutores,cidadeV,contCidade,cursoV,contCurso);
+            				leitura_matricula(matriculaT,contMatriculaT,alunos,contAlunos,turmas,contTurmas,instrutores,contInstrutores,cidadeV,contCidade,cursoV,contCurso);
 							inclusao_matricula(matriculaS,contS,matriculaT,contT,matriculas,contMatriculas);
 							system("cls");
 							
@@ -1081,11 +1017,11 @@ int main(){
 							
 							system("cls");
 							
-						break;
+							break;
 						}
 					
 						case 2:{
-							//mostrar_matricula();
+							mostrar_matricula(matriculas,contMatriculas,alunos,contAlunos,turmas,contTurmas,instrutores,contInstrutores,cursoV,contCurso);
 							getch();
 							system("cls");
 						break;
@@ -1095,13 +1031,38 @@ int main(){
 							system("cls");
 						break;
 						}
-		
 					}
-				
 				}while(menu_matricula!=3);
+				break;
             }
+			
+            case 7:{
+				cout<<"  _______________________"<<endl;
+				cout<<" |  ENCERRAR O PROGRAMA  |" <<endl;
+				cout<<" | 1 - Sim   		 |"<<endl;
+				cout<<" | 2 - Nao	  	 |"<<endl;
+				cout<<" |_______________________|"<<endl;
+				cout<<"\n Digite uma opcao: ";
+				cin>>menu_sair;
+				
+				switch(menu_sair){
+					case 1:{
+						system("cls");
+						invalido=7;
+						break;
+					}
+            		case 2:{
+            			menu_principal=0;
+						system("cls");
+						break;
+					}
+				}
+				break;
+			}
 			default:{
-			cout<<"Opção inválida\n"<<endl;
+			cout<<" Opcao Invalida\n"<<endl;
+        	getch();
+        	system("cls");
         	invalido= 8;
 			break;
 			}
